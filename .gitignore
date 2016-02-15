@@ -1,0 +1,6 @@
+.cproject
+.project
+
+build/
+devel/
+install/
