@@ -137,6 +137,19 @@ include_directories(
 #   ${catkin_LIBRARIES}
 # )
 
+
+## Mark other files for installation (e.g. launch and bag files, etc.)
+file(GLOB launch_files     "launch/*.launch"
+                           )
+#file(GLOB sub_launch_files "launch/sub/*.launch"
+#                           )
+
+## Mark other files for installation (e.g. launch and bag files, etc.)
+ install(FILES
+   ${launch_files}
+#   ${sub_launch_files} 
+   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
+ )
 #############
 ## Install ##
 #############
