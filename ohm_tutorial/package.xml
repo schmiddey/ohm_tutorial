@@ -10,7 +10,7 @@
   <buildtool_depend>catkin</buildtool_depend>
   <run_depend>hello_world</run_depend>
   <run_depend>reactive_navigation</run_depend>
-
+  <run_depend>turtle_control</run_depend>
   <export>
     <metapackage/>
   </export>
