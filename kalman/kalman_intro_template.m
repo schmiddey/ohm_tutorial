@@ -1,4 +1,5 @@
 clear all;
+close all; 
 
 % Anzahl Messwerte
 vals    = 100;
@@ -30,13 +31,31 @@ H = [1 0 0 0; 0 1 0 0];
 R = [sigma 0; 0 sigma];
 
 % Systemrauschen
-Q = [0 0 0 0; 0 0 0 0; 0 0 0 0; 0 0 0 0];
+q = 0.0001; 
+Q = [0 0 0 0; 0 0 0 0; 0 0 q 0; 0 0 0 q];
 
 % Kovarianz
 P = eye(4);
 
+
+
+% Matrix transponieren:  A' oder transpose(A)
+
+% Matrix invertieren: inv(A)
+
 % Implementieren Sie hier den Kalmanfilter
+for i=1:vals
+  x_prio = A *x; 
+  y = H * x_prio; 
+  P = A * P * A' + Q; 
+  K = P * H' * inv(H*P*H' + R); 
+  x = x_prio + K * (data(i,:)' - y); 
+  P = (eye(4) - K * H) * P; 
+  data_kalman(i,:) = x; 
+end
+
+
 
 hold on;
-%plot(data_kalman(:,1),data_kalman(:,2), 'r');
+plot(data_kalman(:,1),data_kalman(:,2), 'r');
 hold off;

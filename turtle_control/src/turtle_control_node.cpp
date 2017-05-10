@@ -6,11 +6,23 @@
 #include <geometry_msgs/Twist.h>        // Nachricht zum Verschicken von Geschwindigkeitsbefehlen
 #include <turtlesim/Spawn.h>            // Spawn Service
 #include <turtlesim/Pose.h>             // Nachricht für die Pose der Schildkröte
+#include <turtlesim/Kill.h>
+#include <turtlesim/SetPen.h>
+
 
 void callbackPose(const turtlesim::Pose& msg)
 {
    std::cout << "Pose.x: " << msg.x << std::endl; 
 
+
+   // if x > 5.0
+   // -> setze Farbe des Stiftes auf Rot
+   // ansonsten setze Farbe auf Grün
+   turtlesim::SetPen pen_srv; 
+   pen_srv.request. ...
+
+
+   pen_client.call(pen_srv); 
 }
 
 
@@ -41,15 +53,27 @@ int main(int argc, char **argv)
   sprintf(pubname, "%s/%s", argv[1], "cmd_vel");
   printf("Publisher: %s\n", pubname);
 
+
+char penname[64]; 
+sprintf(penname, "%s/%s", argv[1], "set_pen"); 
   /**
    * Implementieren Sie hier den Aufruf des Dienstes spawn
    */
    ros::ServiceClient client = n.serviceClient<turtlesim::Spawn>("spawn"); 
-   /*
+   ros::ServiceClient kill_client = n.serviceClient<turtlesim::Kill>("kill");    
+  ros::ServiceClient pen_client = n.serviceClient<turtlesim::SetPen>(penname);   
+/*
     * Senden Sie einen Service-Call über den Service client ab
     * Beachten Sie, dass der name der Schildkröte mit argv[1] gesetzt wird, so dass
     * jede Schildkröte im Netzwerk nur einmal vorkommt.
     */
+   turtlesim::Spawn srv;
+   srv.request.x     = 5.0; 
+   srv.request.y     = 2.0; 
+   srv.request.theta = 3.14;  
+   srv.request.name  = argv[1]; 
+   client.call(srv); 
+
 
    /* Für Schnelle:
     * 1) Ändern Sie die Farbe der Schildkröte in abhängigkeit ihrer x, y Position.
@@ -57,7 +81,7 @@ int main(int argc, char **argv)
     * 2) Lassen Sie die Schildkröte ein Rechteck abfahren.
     *
     */
-   //ros::Subscriber pose_sub = n.subscribe("chris/pose", 1, callbackPose);
+  ros::Subscriber pose_sub = n.subscribe("chris/pose", 1, callbackPose);
 
 
   /**
@@ -78,13 +102,22 @@ int main(int argc, char **argv)
        * bahn fährt.
        * Schicken Sie die Nachricht
        */
+      geometry_msgs::Twist msg; 
+      // fuellen der Nachricht
+      msg.linear.x  =  1.0; 
+      msg.angular.z = -1.0; 
 
-
-
+      // Absenden
+      vel_pub.publish(msg);  
 
       ros::spinOnce();  
       r.sleep(); 
    }
+
+   turtlesim::Kill kill_srv; 
+   kill_srv.request.name = argv[1]; 
+   kill_client.call(kill_srv);
+
 
   return 0;
 }
