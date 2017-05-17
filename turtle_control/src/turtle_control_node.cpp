@@ -12,17 +12,7 @@
 
 void callbackPose(const turtlesim::Pose& msg)
 {
-   std::cout << "Pose.x: " << msg.x << std::endl; 
-
-
-   // if x > 5.0
-   // -> setze Farbe des Stiftes auf Rot
-   // ansonsten setze Farbe auf Grün
-   turtlesim::SetPen pen_srv; 
-   pen_srv.request. ...
-
-
-   pen_client.call(pen_srv); 
+   // ... 
 }
 
 
@@ -59,20 +49,16 @@ sprintf(penname, "%s/%s", argv[1], "set_pen");
   /**
    * Implementieren Sie hier den Aufruf des Dienstes spawn
    */
-   ros::ServiceClient client = n.serviceClient<turtlesim::Spawn>("spawn"); 
+   ros::ServiceClient client      = n.serviceClient<turtlesim::Spawn>("spawn"); 
    ros::ServiceClient kill_client = n.serviceClient<turtlesim::Kill>("kill");    
-  ros::ServiceClient pen_client = n.serviceClient<turtlesim::SetPen>(penname);   
+   ros::ServiceClient pen_client  = n.serviceClient<turtlesim::SetPen>(penname);   
 /*
     * Senden Sie einen Service-Call über den Service client ab
     * Beachten Sie, dass der name der Schildkröte mit argv[1] gesetzt wird, so dass
     * jede Schildkröte im Netzwerk nur einmal vorkommt.
     */
    turtlesim::Spawn srv;
-   srv.request.x     = 5.0; 
-   srv.request.y     = 2.0; 
-   srv.request.theta = 3.14;  
-   srv.request.name  = argv[1]; 
-   client.call(srv); 
+   // ... 
 
 
    /* Für Schnelle:
@@ -103,20 +89,14 @@ sprintf(penname, "%s/%s", argv[1], "set_pen");
        * Schicken Sie die Nachricht
        */
       geometry_msgs::Twist msg; 
-      // fuellen der Nachricht
-      msg.linear.x  =  1.0; 
-      msg.angular.z = -1.0; 
-
-      // Absenden
-      vel_pub.publish(msg);  
+      // ... 
 
       ros::spinOnce();  
       r.sleep(); 
    }
 
    turtlesim::Kill kill_srv; 
-   kill_srv.request.name = argv[1]; 
-   kill_client.call(kill_srv);
+   // ...
 
 
   return 0;
