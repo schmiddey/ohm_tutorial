@@ -12,7 +12,7 @@
 
 void callbackPose(const turtlesim::Pose& msg)
 {
-   // ... 
+
 }
 
 
@@ -58,7 +58,10 @@ sprintf(penname, "%s/%s", argv[1], "set_pen");
     * jede Schildkröte im Netzwerk nur einmal vorkommt.
     */
    turtlesim::Spawn srv;
-   // ... 
+   srv.request.x = 5.0;
+   srv.request.y = 5.0;
+   srv.request.name = "chris";
+   client.call(srv);
 
 
    /* Für Schnelle:
@@ -89,7 +92,11 @@ sprintf(penname, "%s/%s", argv[1], "set_pen");
        * Schicken Sie die Nachricht
        */
       geometry_msgs::Twist msg; 
-      // ... 
+      msg.linear.x = 3.0;
+      msg.angular.z = 1.0;
+      vel_pub.publish(msg);
+
+
 
       ros::spinOnce();  
       r.sleep(); 
