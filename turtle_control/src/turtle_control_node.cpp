@@ -16,7 +16,7 @@ void callbackPose(const turtlesim::Pose& msg)
 }
 
 
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
   if(argc<2)
   {
@@ -28,9 +28,8 @@ int main(int argc, char **argv)
   /**
    * Name des eigenen Knotens
    */
-  char node[64];
-  sprintf(node, "%s%s", argv[1], "_node");
-  printf("Neuer Knoten: %s\n", node);
+  std::string node = std::string(argv[1]) + "_node";
+  std::cout << "Neuer Knoten: " << node << std::endl;
 
   ros::init(argc, argv, node);
   ros::NodeHandle n;
@@ -39,13 +38,17 @@ int main(int argc, char **argv)
   /**
    * Name des publishers
    */
-  char pubname[64];
-  sprintf(pubname, "%s/%s", argv[1], "cmd_vel");
-  printf("Publisher: %s\n", pubname);
+  std::string pubname = std::string(argv[1]) + "/cmd_vel";
+  std::cout << "Publisher cmd_vel: " << pubname << std::endl;
+  /**
+   * Name Pen Service
+   */
+  std::string penname = std::string(argv[1]) + "/set_pen";
+  std::cout << "Set Pen Service: " << penname << std::endl;
+  
+  std::string subname = std::string(argv[1]) + "/pose";
+  std::cout << "Subscriber Pose: " << subname << std::endl;
 
-
-char penname[64]; 
-sprintf(penname, "%s/%s", argv[1], "set_pen"); 
   /**
    * Implementieren Sie hier den Aufruf des Dienstes spawn
    */
@@ -67,7 +70,7 @@ sprintf(penname, "%s/%s", argv[1], "set_pen");
     * 2) Lassen Sie die Schildkröte ein Rechteck abfahren.
     *
     */
-  ros::Subscriber pose_sub = n.subscribe("chris/pose", 1, callbackPose);
+  ros::Subscriber pose_sub = n.subscribe(subname, 1, callbackPose);
 
 
   /**
